@@ -35,7 +35,7 @@
                     <div class="form-group mb-3">
                         <label for="priority" style="color: #5A607F; font-size: 14px;">Priority<span
                                 style="color: #FF0000">*</span></label>
-                        <select name="" class="form-select" style="border: 1px solid #D9E1EC; border-radius: 4px;"
+                        <select name="priority" class="form-select" style="border: 1px solid #D9E1EC; border-radius: 4px;"
                             required>
                             <option value="" selected disabled hidden>Choose Priority</option>
                             <option value="Low">Low</option>
