@@ -211,6 +211,13 @@
                 });
             });
 
+                document.getElementById('perPage').addEventListener('change', function() {
+                const perPageValue = this.value;
+                const url = new URL(window.location.href);
+                url.searchParams.set('per_page', perPageValue);
+                window.location.href = url;
+            });
+
             const doneForms = document.querySelectorAll('.done-form');
             doneForms.forEach(form => {
                 form.addEventListener('submit', function(event) {

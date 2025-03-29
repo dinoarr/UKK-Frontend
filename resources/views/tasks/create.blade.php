@@ -20,9 +20,9 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="x" style="color: #5A607F; font-size: 14px;">Date<span
+                        <label for="deadline" style="color: #5A607F; font-size: 14px;">Date<span
                                 style="color: #FF0000">*</span></label>
-                        <input type="date" min="<?= date('Y-m-d') ?>" name="date" class="form-control"
+                        <input type="date" min="<?= date('Y-m-d') ?>" name="deadline" class="form-control"
                             value="{{ old('date') }}" style="border: 1px solid #D9E1EC; border-radius: 4px;" required>
                     </div>
 
@@ -33,7 +33,7 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="task_name" style="color: #5A607F; font-size: 14px;">Priority<span
+                        <label for="priority" style="color: #5A607F; font-size: 14px;">Priority<span
                                 style="color: #FF0000">*</span></label>
                         <select name="" class="form-select" style="border: 1px solid #D9E1EC; border-radius: 4px;"
                             required>
