@@ -40,7 +40,7 @@
                             <option value="" selected disabled hidden>Choose Priority</option>
                             <option value="Low">Low</option>
                             <option value="Medium">Medium</option>
-                            <option value="High">Low</option>
+                            <option value="High">High</option>
                         </select>
                     </div>
 
