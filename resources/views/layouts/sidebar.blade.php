@@ -15,6 +15,7 @@
             <i class="fas fa-clipboard-list"></i>
             <span class="menu-text">Tasks</span>
         </a>
+        
         <a href="{{ route('completed') }}" class="menu-item {{ request()->routeIs('completed') ? 'active' : '' }}">
             <i class="fas fa-clipboard-check"></i>
             <span class="menu-text">Completed Tasks</span>
