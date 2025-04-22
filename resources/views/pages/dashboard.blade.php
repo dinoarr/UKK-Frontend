@@ -20,7 +20,7 @@
                     </p>
                 </div>
                 <div>
-                    <img src="{{ asset('assets/images/todolist.png') }}" width="150" height="140" alt="">
+                    <img src="{{ asset('assets/images/todolist.png') }}" width="150" height="150" alt="">
                 </div>
             </div>
         </div>
@@ -37,7 +37,7 @@
                             <i class="fas fa-clipboard-list text-white" style="font-size: 22px;"></i>
                         </div>
                         <div>
-                            <h2 class="mb-0" style="font-size: 22px; font-weight: 500; color: #6C757D;">56</h2>
+                            <h2 class="mb-0" style="font-size: 22px; font-weight: 500; color: #6C757D;">{{ $tasksAll }}</h2>
                             <p class="mb-0" style="font-size: 14px; color: #9AA0A6;">Number of Task</p>
                         </div>
                     </div>
@@ -53,7 +53,7 @@
                             <i class="fas fa-clipboard-check text-white" style="font-size: 22px;"></i>
                         </div>
                         <div>
-                            <h2 class="mb-0" style="font-size: 22px; font-weight: 500; color: #6C757D;">62</h2>
+                            <h2 class="mb-0" style="font-size: 22px; font-weight: 500; color: #6C757D;">{{ $tasksDone }}</h2>
                             <p class="mb-0" style="font-size: 14px; color: #9AA0A6;">Task Completed</p>
                         </div>
                     </div>
@@ -69,7 +69,7 @@
                             <i class="fas fa-thumbtack text-white" style="font-size: 22px;"></i>
                         </div>
                         <div>
-                            <h2 class="mb-0" style="font-size: 22px; font-weight: 500; color: #6C757D;">87</h2>
+                            <h2 class="mb-0" style="font-size: 22px; font-weight: 500; color: #6C757D;">{{ $tasksPending }}</h2>
                             <p class="mb-0" style="font-size: 14px; color: #9AA0A6;">Task Incompleted</p>
                         </div>
                     </div>
@@ -95,43 +95,36 @@
                                 <th style="color: #5A607F; font-weight: 400; font-size: 14px;">Status</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td style="color: #131523; font-weight: 400; font-size: 14px">1.</td>
-                                <td style="color: #131523; font-weight: 400; font-size: 14px">Coding</td>
-                                <td style="color: #131523; font-weight: 400; font-size: 14px">May 5, 2025</td>
-                                <td style="color: #131523; font-weight: 400; font-size: 14px">Coding is fun...</td>
-                                <td style="color: #131523; font-weight: 400; font-size: 14px"><span
-                                        class="badge badge-custom-2">High</span>
-                                </td>
-                                <td style="color: #131523; font-weight: 400; font-size: 14px"><span
-                                        class="badge badge-custom-3">Pending</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="color: #131523; font-weight: 400; font-size: 14px">2.</td>
-                                <td style="color: #131523; font-weight: 400; font-size: 14px">Coding</td>
-                                <td style="color: #131523; font-weight: 400; font-size: 14px">May 5, 2025</td>
-                                <td style="color: #131523; font-weight: 400; font-size: 14px">Coding is fun...</td>
-                                <td style="color: #131523; font-weight: 400; font-size: 14px"><span
-                                        class="badge badge-custom-2">High</span>
-                                </td>
-                                <td style="color: #131523; font-weight: 400; font-size: 14px"><span
-                                        class="badge badge-custom-3">Pending</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="color: #131523; font-weight: 400; font-size: 14px">3.</td>
-                                <td style="color: #131523; font-weight: 400; font-size: 14px">Coding</td>
-                                <td style="color: #131523; font-weight: 400; font-size: 14px">May 5, 2025</td>
-                                <td style="color: #131523; font-weight: 400; font-size: 14px">Coding is fun...</td>
-                                <td style="color: #131523; font-weight: 400; font-size: 14px"><span
-                                        class="badge badge-custom-2">High</span>
-                                </td>
-                                <td style="color: #131523; font-weight: 400; font-size: 14px"><span
-                                        class="badge badge-custom-3">Pending</span>
-                                </td>
-                            </tr>
+                        <tbody id="tasks-table-body">
+                            @if ($tasks->isEmpty())
+                                <tr>
+                                    <td style="color: #131523; font-weight: 400; font-size: 14px" colspan="6"
+                                        class="text-center">No data alvailable</td>
+                                </tr>
+                            @else
+                                @foreach ($tasks as $item)
+                                    <tr>
+                                        <td style="color: #131523; font-weight: 400; font-size: 14px">{{ $loop->iteration }}
+                                        </td>
+                                        <td style="color: #131523; font-weight: 400; font-size: 14px">{{ $item->task_name }}
+                                        </td>
+                                        <td style="color: #131523; font-weight: 400; font-size: 14px">
+                                            {{ \Carbon\Carbon::parse($item->deadline)->format('F j, Y') }}</td>
+                                        <td style="color: #131523; font-weight: 400; font-size: 14px">
+                                            {{ Str::limit($item->description, 13, '...') }}</td>
+                                        <td style="color: #131523; font-weight: 400; font-size: 14px"><span
+                                                class="badge {{ $item->priority == 'Low'
+                                                    ? 'badge-custom-1'
+                                                    : ($item->priority == 'Medium'
+                                                        ? 'badge-custom-3'
+                                                        : 'badge-custom-2') }}">{{ $item->priority }}</span>
+                                        </td>
+                                        <td style="color: #131523; font-weight: 400; font-size: 14px"><span
+                                                class="badge badge-custom-3">{{ $item->status }}</span>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>

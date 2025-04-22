@@ -176,6 +176,20 @@ body {
     color: #ffffff !important;
 }
 
+.btn.btn-custom-6 {
+    background-color: #e0dd0a !important;
+    color: #ffffff !important;
+}
+.btn.btn-custom-6:hover,
+.btn.btn-custom-6:active,
+.btn.btn-custom-6:focus {
+    background-color: #e0dd0a !important;
+    color: #ffffff !important;
+}
+.btn.btn-custom-6 i {
+    color: #ffffff !important;
+}
+
 .pagination-container {
     display: flex;
     justify-content: flex-end;

@@ -28,7 +28,7 @@
                     </div>
 
                     <div>
-                        <a href="/tasks/create" class="btn btn-lg text-white d-flex align-items-center"
+                        <a href="{{ route('task.create') }}" class="btn btn-lg text-white d-flex align-items-center"
                             style="background-color:  #48BEFF; border-radius: 4px; font-size: 14px; font-weight: 400">
                             + Add Task
                         </a>
@@ -49,92 +49,73 @@
                         </tr>
                     </thead>
                     <tbody id="tasks-table-body">
-                        <tr>
-                            <td style="color: #131523; font-weight: 400; font-size: 14px">1.</td>
-                            <td style="color: #131523; font-weight: 400; font-size: 14px">Coding</td>
-                            <td style="color: #131523; font-weight: 400; font-size: 14px">May 5, 2025</td>
-                            <td style="color: #131523; font-weight: 400; font-size: 14px">Coding is fun...</td>
-                            <td style="color: #131523; font-weight: 400; font-size: 14px"><span
-                                    class="badge badge-custom-1">Low</span>
-                            </td>
-                            <td style="color: #131523; font-weight: 400; font-size: 14px"><span
-                                    class="badge badge-custom-3">Pending</span>
-                            </td>
-                            <td class="d-flex align-items-center gap-2">
-                                <form action="#" method="POST" class="done-form">
-                                    <button type="submit" class="btn btn-sm btn-custom-3" data-toggle="tooltip"
-                                        title="Mark as Done">
-                                        <i class="fas fa-check"></i>
-                                    </button>
-                                </form>
-                                <a href="/tasks/edit" class="btn btn-sm btn-custom-1"><i class="fas fa-edit"></i></a>
-                                <form action="#" method="POST" class="delete-form">
-                                    <button type="submit" class="btn btn-sm btn-custom-2" data-toggle="tooltip"
-                                        title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="color: #131523; font-weight: 400; font-size: 14px">2.</td>
-                            <td style="color: #131523; font-weight: 400; font-size: 14px">Coding</td>
-                            <td style="color: #131523; font-weight: 400; font-size: 14px">May 5, 2025</td>
-                            <td style="color: #131523; font-weight: 400; font-size: 14px">Coding is fun...</td>
-                            <td style="color: #131523; font-weight: 400; font-size: 14px"><span
-                                    class="badge badge-custom-2">High</span>
-                            </td>
-                            <td style="color: #131523; font-weight: 400; font-size: 14px"><span
-                                    class="badge badge-custom-3">Pending</span>
-                            </td>
-                            <td class="d-flex align-items-center gap-2">
-                                <form action="#" method="POST" class="done-form">
-                                    <button type="submit" class="btn btn-sm btn-custom-3" data-toggle="tooltip"
-                                        title="Mark as Done">
-                                        <i class="fas fa-check"></i>
-                                    </button>
-                                </form>
-                                <a href="/tasks/edit" class="btn btn-sm btn-custom-1"><i class="fas fa-edit"></i></a>
-                                <form action="#" method="POST" class="delete-form">
-                                    <button type="submit" class="btn btn-sm btn-custom-2" data-toggle="tooltip"
-                                        title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
+                        @if ($tasks->isEmpty())
+                            <tr>
+                                <td style="color: #131523; font-weight: 400; font-size: 14px" colspan="7"
+                                    class="text-center">No data alvailable</td>
+                            </tr>
+                        @else
+                            @foreach ($tasks as $item)
+                                <tr>
+                                    <td style="color: #131523; font-weight: 400; font-size: 14px">{{ $loop->iteration }}
+                                    </td>
+                                    <td style="color: #131523; font-weight: 400; font-size: 14px">{{ $item->task_name }}
+                                    </td>
+                                    <td style="color: #131523; font-weight: 400; font-size: 14px">
+                                        {{ \Carbon\Carbon::parse($item->deadline)->format('F j, Y') }}</td>
+                                    <td style="color: #131523; font-weight: 400; font-size: 14px">
+                                        {{ Str::limit($item->description, 13, '...') }}</td>
+                                    <td style="color: #131523; font-weight: 400; font-size: 14px"><span
+                                            class="badge {{ $item->priority == 'Low'
+                                                ? 'badge-custom-1'
+                                                : ($item->priority == 'Medium'
+                                                    ? 'badge-custom-3'
+                                                    : 'badge-custom-2') }}">{{ $item->priority }}</span>
+                                    </td>
+                                    <td style="color: #131523; font-weight: 400; font-size: 14px"><span
+                                            class="badge badge-custom-3">{{ $item->status }}</span>
+                                    </td>
+                                    <td class="d-flex align-items-center gap-2">
+                                        @if ($item->status == 'Pending')
+                                            <form action="{{ route('task.ongoing', $item->id) }}" method="POST"
+                                                class="ongoing-form">
+                                                @csrf
+                                                @method('POST')
+                                                <button type="submit" class="btn btn-sm btn-custom-6" data-toggle="tooltip"
+                                                    title="Mark as ongoing">
+                                                    <i class="fas fa-spinner"></i>
+                                                </button>
+                                            </form>
+                                        @elseif ($item->status == 'Ongoing')
+                                            <form action="{{ route('task.done', $item->id) }}" method="POST"
+                                                class="done-form">
+                                                @csrf
+                                                @method('POST')
+                                                <button type="submit" class="btn btn-sm btn-custom-3" data-toggle="tooltip"
+                                                    title="Mark as Done">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                            </form>
+                                        @endif
+                                        <a href="{{ route('task.edit', $item->id) }}" class="btn btn-sm btn-custom-1"><i
+                                                class="fas fa-edit"></i></a>
+                                        <form action="{{ route('task.delete', $item->id) }}" method="POST"
+                                            class="delete-form">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-custom-2" data-toggle="tooltip"
+                                                title="Delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif
                     </tbody>
                 </table>
 
                 <div class="d-flex justify-content-between align-items-center mt-5">
-                    <span style="font-size: 16px; font-weight: 400; color: #5A607F">Showing 2 to 2 of 2 Entries</span>
-                    <div class="pagination-container">
-                        <nav aria-label="Page navigation">
-                            <ul class="custom-pagination">
-
-                                <li class="pagination-item">
-                                    <a class="pagination-link pagination-arrow" href="#">
-                                        <i class="fa-solid fa-chevron-left"></i>
-                                    </a>
-                                </li>
-
-                                <li class="pagination-item active"><a class="pagination-link active" href="#">1</a>
-                                </li>
-
-                                <li class="pagination-item "><a class="pagination-link " href="#">2</a>
-                                </li>
-
-                                <li class="pagination-item">
-                                    <a class="pagination-link pagination-arrow" href="#">
-                                        <i class="fa-solid fa-chevron-right"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-
-                {{-- <div class="d-flex justify-content-between align-items-center mt-5">
                     <span style="font-size: 16px; font-weight: 400; color: #5A607F">
                         Showing {{ $tasks->firstItem() }} to {{ $tasks->lastItem() }} of {{ $tasks->total() }} Entries
                     </span>
@@ -148,8 +129,7 @@
                                     </li>
                                 @else
                                     <li class="pagination-item">
-                                        <a href="{{ $tasks->previousPageUrl() }}"
-                                            class="pagination-link pagination-arrow">
+                                        <a href="{{ $tasks->previousPageUrl() }}" class="pagination-link pagination-arrow">
                                             <i class="fa-solid fa-chevron-left"></i>
                                         </a>
                                     </li>
@@ -162,8 +142,7 @@
                                         </li>
                                     @else
                                         <li class="pagination-item">
-                                            <a href="{{ $url }}"
-                                                class="pagination-link">{{ $page }}</a>
+                                            <a href="{{ $url }}" class="pagination-link">{{ $page }}</a>
                                         </li>
                                     @endif
                                 @endforeach
@@ -183,7 +162,7 @@
                             </ul>
                         </nav>
                     </div>
-                </div> --}}
+                </div>
             </div>
         </div>
     </div>
@@ -211,11 +190,32 @@
                 });
             });
 
-                document.getElementById('perPage').addEventListener('change', function() {
+            document.getElementById('perPage').addEventListener('change', function() {
                 const perPageValue = this.value;
                 const url = new URL(window.location.href);
                 url.searchParams.set('per_page', perPageValue);
                 window.location.href = url;
+            });
+
+            const ongoingForms = document.querySelectorAll('.ongoing-form');
+            ongoingForms.forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    Swal.fire({
+                        title: 'Task Is Ongoing?',
+                        text: 'This action cannot be undone!',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes',
+                        cancelButtonText: 'Cancel',
+                        confirmButtonColor: '#28a745',
+                        cancelButtonColor: '#dc3545',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
             });
 
             const doneForms = document.querySelectorAll('.done-form');
